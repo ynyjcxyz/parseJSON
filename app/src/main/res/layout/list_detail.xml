@@ -1,35 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="horizontal"
-    android:padding="16dp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="72dp"
+    android:orientation="horizontal">
 
     <TextView
-        android:id="@+id/mag"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:id="@+id/magnitude"
+        android:layout_width="72dp"
+        android:layout_height="match_parent"
         android:layout_weight="1"
+        android:gravity="center_vertical|center_horizontal"
         android:textColor="#000000"
-        tools:text="@string/text1"
-        tools:ignore="RtlHardcoded,SmallSp" />
+        tools:text="mag"
+        tools:ignore="RtlSymmetry" />
 
-    <TextView
-        android:id="@+id/city"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+    <LinearLayout
+        android:layout_width="144dp"
+        android:layout_height="match_parent"
         android:layout_weight="1"
-        android:textColor="#000000"
-        tools:text="@string/text1"
-        tools:ignore="RtlHardcoded" />
-    <TextView
-        android:id="@+id/date"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/location1"
+            android:gravity="center_vertical|left"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:textColor="#000000"
+            tools:text="Location1"
+            tools:ignore="NestedWeights,RtlHardcoded" />
+
+        <TextView
+            android:id="@+id/location2"
+            android:gravity="center_vertical|left"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:textColor="#000000"
+            tools:text="Location2"
+            tools:ignore="RtlHardcoded" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="144dp"
+        android:layout_height="match_parent"
         android:layout_weight="1"
-        android:textColor="#000000"
-        tools:text="@string/text1"
-        tools:ignore="RtlHardcoded" />
+        android:paddingEnd="16dp"
+        android:orientation="vertical"
+        tools:ignore="RtlSymmetry">
+
+        <TextView
+            android:id="@+id/date"
+            android:gravity="center_vertical|right"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:textColor="#000000"
+            tools:text="Date"
+            tools:ignore="NestedWeights,RtlHardcoded" />
+
+        <TextView
+            android:id="@+id/time"
+            android:gravity="center_vertical|right"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:textColor="#000000"
+            tools:text="Time"
+            tools:ignore="RtlHardcoded" />
+    </LinearLayout>
+
 </LinearLayout>
