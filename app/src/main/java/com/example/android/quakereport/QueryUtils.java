@@ -61,12 +61,13 @@ public final class QueryUtils {
                 double mag = JSONObjectProperty.getDouble("mag");
                 String place = JSONObjectProperty.optString("place");
                 long time = JSONObjectProperty.getLong("time");
+                String url = JSONObjectProperty.optString("url");
 //                long unix_seconds = Long.parseLong(JSONObjectProperty.optString("time"));
 //                Date date = new Date(unix_seconds);
 //                @SuppressLint("SimpleDateFormat")
 //                String java_date = new SimpleDateFormat("MMM dd, yyyy").format(date);
 
-                Earthquake earthquakeData = new Earthquake(mag,place,time);
+                Earthquake earthquakeData = new Earthquake(mag,place,time,url);
                 earthquakes.add(i,earthquakeData);
             }
 
