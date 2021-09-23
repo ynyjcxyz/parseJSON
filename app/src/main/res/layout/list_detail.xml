@@ -2,72 +2,85 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="72dp"
-    android:orientation="horizontal">
+    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:orientation="horizontal"
+    android:paddingEnd="16dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingStart="16dp">
 
     <TextView
         android:id="@+id/magnitude"
-        android:layout_width="72dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center_vertical|center_horizontal"
-        android:textColor="#000000"
-        tools:text="mag"
-        tools:ignore="RtlSymmetry" />
+        android:background="@drawable/magnitude_circle"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_gravity="center_vertical"
+        android:textColor="@android:color/white"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center"
+        tools:text="0.0"
+        android:textSize="16sp" />
 
     <LinearLayout
-        android:layout_width="144dp"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
         android:layout_weight="1"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:ignore="RtlHardcoded">
 
         <TextView
             android:id="@+id/location1"
-            android:gravity="center_vertical|left"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:textColor="#000000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-medium"
+            android:maxLines="1"
+            android:textAllCaps="true"
+            android:textColor="@color/textColorEarthquakeDetails"
             tools:text="Location1"
-            tools:ignore="NestedWeights,RtlHardcoded" />
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/location2"
-            android:gravity="center_vertical|left"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:textColor="#000000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="@color/textColorEarthquakeLocation"
             tools:text="Location2"
-            tools:ignore="RtlHardcoded" />
+            android:textSize="16sp"/>
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="144dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:paddingEnd="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
         android:orientation="vertical"
-        tools:ignore="RtlSymmetry">
+        tools:ignore="RtlHardcoded">
 
         <TextView
             android:id="@+id/date"
-            android:gravity="center_vertical|right"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:textColor="#000000"
+            android:layout_gravity="end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textColorEarthquakeDetails"
+            android:textSize="12sp"
             tools:text="Date"
             tools:ignore="NestedWeights,RtlHardcoded" />
 
         <TextView
             android:id="@+id/time"
-            android:gravity="center_vertical|right"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:textColor="#000000"
+            android:layout_gravity="end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textColorEarthquakeDetails"
+            android:textSize="12sp"
             tools:text="Time"
             tools:ignore="RtlHardcoded" />
     </LinearLayout>
