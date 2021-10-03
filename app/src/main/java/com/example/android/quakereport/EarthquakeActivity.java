@@ -17,84 +17,57 @@ package com.example.android.quakereport;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import java.util.ArrayList;
 
 public class EarthquakeActivity extends AppCompatActivity {
-    ArrayList<Earthquake> earthquakes = QueryUtils.extractEarthquakes();
-
-    private static Uri getUri(int mPosition){
-        return Uri.parse(QueryUtils.extractEarthquakes().get(mPosition).getUrl());
-    }
+    private EarthquakeAdapter mAdapter;
+    private static final String USGS_REQUEST_URL = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=6&limit=10";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.earthquake_activity);
 
-/*        ArrayList<Earthquake> items = new ArrayList<>();
-        items.add(new Earthquake("7.2","San Francisco","Feb 2,2016"));
-        items.add(new Earthquake("6.1","London","July 20,2015"));
-        items.add(new Earthquake("3.9","Tokyo","Nov 10,2014"));
-        items.add(new Earthquake("5.4","Mexico","May 3,2014"));
-        items.add(new Earthquake("2.8","Moscow","Jan 31,2013"));
-        items.add(new Earthquake("4.9","Rio de Janeiro","Aug 19,2012"));
-        items.add(new Earthquake("1.6","Paris","Oct 30,2011"));*/
+        mAdapter = new EarthquakeAdapter(this, new ArrayList<Earthquake>());
 
-        EarthquakeAdapter itemsAdapter = new EarthquakeAdapter(this, earthquakes);
-        ListView listView = findViewById(R.id.list);
-        listView.setAdapter(itemsAdapter);
-
-        listView.setOnItemClickListener((parent, view, position, id) -> {
-            switch (position) {
-                case 0: Intent intent0 = new Intent(Intent.ACTION_VIEW, getUri(0));
-                    startActivity(intent0);
-                    break;
-                case 1: Intent intent1 = new Intent(Intent.ACTION_VIEW, getUri(1));
-                    startActivity(intent1);
-                    break;
-                case 2: Intent intent2 = new Intent(Intent.ACTION_VIEW, getUri(2));
-                    startActivity(intent2);
-                    break;
-                case 3: Intent intent3 = new Intent(Intent.ACTION_VIEW, getUri(3));
-                    startActivity(intent3);
-                    break;
-                case 4: Intent intent4 = new Intent(Intent.ACTION_VIEW, getUri(4));
-                    startActivity(intent4);
-                    break;
-                case 5: Intent intent5 = new Intent(Intent.ACTION_VIEW, getUri(5));
-                    startActivity(intent5);
-                    break;
-                case 6: Intent intent6 = new Intent(Intent.ACTION_VIEW, getUri(6));
-                    startActivity(intent6);
-                    break;
-                case 7: Intent intent7 = new Intent(Intent.ACTION_VIEW, getUri(7));
-                    startActivity(intent7);
-                    break;
-                case 8: Intent intent8 = new Intent(Intent.ACTION_VIEW, getUri(8));
-                    startActivity(intent8);
-                    break;
-                case 9: Intent intent9 = new Intent(Intent.ACTION_VIEW, getUri(9));
-                    startActivity(intent9);
-                    break;
-            }
-        });
-/*        ArrayList<String> earthquakes = new ArrayList<>();
-        earthquakes.add("San Francisco");
-        earthquakes.add("London");
-        earthquakes.add("Tokyo");
-        earthquakes.add("Mexico City");
-        earthquakes.add("Moscow");
-        earthquakes.add("Rio de Janeiro");
-        earthquakes.add("Paris");
+        EarthquakeAsyncTask asyncTask = new EarthquakeAsyncTask();
+        asyncTask.execute(USGS_REQUEST_URL);
 
         ListView earthquakeListView = (ListView) findViewById(R.id.list);
+        earthquakeListView.setAdapter(mAdapter);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                this, android.R.layout.simple_list_item_1, earthquakes);
+        earthquakeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Earthquake currentEarthquake = mAdapter.getItem(position);
+                Uri earthquakeUri = Uri.parse(currentEarthquake.getUrl());
+                Intent websiteIntent = new Intent(Intent.ACTION_VIEW, earthquakeUri);
+                startActivity(websiteIntent);
+            }
+        });
+    }
 
-        earthquakeListView.setAdapter(adapter);*/
+    private class EarthquakeAsyncTask extends AsyncTask<String, Void, ArrayList<Earthquake>> {
+        @Override
+        protected ArrayList<Earthquake> doInBackground(String... urls) {
+            if (urls.length < 1 || urls[0] == null) {
+                return null;
+            }
+            return QueryUtils.fetchEarthquakeData(urls[0]);
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Earthquake> data) {
+            mAdapter.clear();
+            if (data != null && !data.isEmpty()) {
+                mAdapter.addAll(data);
+            }
+        }
     }
 }
