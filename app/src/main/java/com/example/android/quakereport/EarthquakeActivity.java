@@ -19,13 +19,17 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import java.util.ArrayList;
 
-public class EarthquakeActivity extends AppCompatActivity {
+public class EarthquakeActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ArrayList<Earthquake>> {
     private EarthquakeAdapter mAdapter;
     private static final String USGS_REQUEST_URL = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=6&limit=10";
 
@@ -36,11 +40,12 @@ public class EarthquakeActivity extends AppCompatActivity {
 
         mAdapter = new EarthquakeAdapter(this, new ArrayList<Earthquake>());
 
-        EarthquakeAsyncTask asyncTask = new EarthquakeAsyncTask();
-        asyncTask.execute(USGS_REQUEST_URL);
+/**        EarthquakeAsyncTask asyncTask = new EarthquakeAsyncTask();
+        asyncTask.execute(USGS_REQUEST_URL);*/
 
         ListView earthquakeListView = (ListView) findViewById(R.id.list);
         earthquakeListView.setAdapter(mAdapter);
+        getSupportLoaderManager().initLoader(1, null, this).forceLoad();
 
         earthquakeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -53,7 +58,26 @@ public class EarthquakeActivity extends AppCompatActivity {
         });
     }
 
-    private class EarthquakeAsyncTask extends AsyncTask<String, Void, ArrayList<Earthquake>> {
+    @NonNull
+    @Override
+    public Loader<ArrayList<Earthquake>> onCreateLoader(int i, @Nullable Bundle bundle) {
+        return new EarthquakeLoader(EarthquakeActivity.this,USGS_REQUEST_URL);
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<ArrayList<Earthquake>> loader, ArrayList<Earthquake> earthquakes) {
+        mAdapter.clear();
+        if(earthquakes != null && !earthquakes.isEmpty()){
+            mAdapter.addAll(earthquakes);
+        }
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<ArrayList<Earthquake>> loader) {
+        mAdapter.addAll(new ArrayList<Earthquake>());
+    }
+
+/**    private class EarthquakeAsyncTask extends AsyncTask<String, Void, ArrayList<Earthquake>> {
         @Override
         protected ArrayList<Earthquake> doInBackground(String... urls) {
             if (urls.length < 1 || urls[0] == null) {
@@ -69,5 +93,5 @@ public class EarthquakeActivity extends AppCompatActivity {
                 mAdapter.addAll(data);
             }
         }
-    }
+    }*/
 }

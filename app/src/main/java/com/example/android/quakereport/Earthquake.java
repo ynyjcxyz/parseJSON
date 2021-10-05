@@ -6,11 +6,11 @@ public class Earthquake {
     private final long mTimeInMilliseconds;
     private final String mUrl;
 
-    public Earthquake(double magnitude, String location, long timeInMilliseconds,String url) {
-        mMagnitude = magnitude;
-        mLocation = location;
-        mTimeInMilliseconds = timeInMilliseconds;
-        mUrl = url;
+    public Earthquake(double magnitude, String location, long timeInMilliseconds, String url) {
+        this.mMagnitude = magnitude;
+        this.mLocation = location;
+        this.mTimeInMilliseconds = timeInMilliseconds;
+        this.mUrl = url;
     }
 
     public double getMagnitude() {
@@ -21,7 +21,11 @@ public class Earthquake {
         return this.mLocation;
     }
 
-    public long getTimeInMilliseconds() { return this.mTimeInMilliseconds; }
+    public long getTimeInMilliseconds() {
+        return this.mTimeInMilliseconds;
+    }
 
-    public String getUrl() { return this.mUrl;}
+    public String getUrl() {
+        return this.mUrl;
+    }
 }
