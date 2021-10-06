@@ -2,7 +2,6 @@ package com.example.android.quakereport;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.graphics.drawable.GradientDrawable;
-
 import java.sql.Date;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
