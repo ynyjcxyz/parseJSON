@@ -16,7 +16,10 @@
 package com.example.android.quakereport;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -30,29 +33,31 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import java.util.ArrayList;
 
 public class EarthquakeActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ArrayList<Earthquake>> {
     public static final String LOG_TAG = EarthquakeActivity.class.getSimpleName();
     private EarthquakeAdapter mAdapter;
     private static final String USGS_REQUEST_URL = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=6&limit=10";
+    private static final int EARTHQUAKE_LOADER_ID = 1;
     private TextView mEmptyStateTextView;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.earthquake_activity);
+
         mAdapter = new EarthquakeAdapter(this, new ArrayList<Earthquake>());
 /**        EarthquakeAsyncTask asyncTask = new EarthquakeAsyncTask();
  asyncTask.execute(USGS_REQUEST_URL);*/
         ListView earthquakeListView = (ListView) findViewById(R.id.list);
 
-        earthquakeListView.setAdapter(mAdapter);
-        getSupportLoaderManager().initLoader(1, null, this).forceLoad();
-        Log.i(LOG_TAG, "This is initLoader()");
-
         mEmptyStateTextView = findViewById(R.id.empty_view);
         earthquakeListView.setEmptyView(mEmptyStateTextView);
+
+        earthquakeListView.setAdapter(mAdapter);
 
         earthquakeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -63,6 +68,19 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
                 startActivity(websiteIntent);
             }
         });
+
+        ConnectivityManager cm =
+                (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            getSupportLoaderManager().initLoader(EARTHQUAKE_LOADER_ID, null, this).forceLoad();
+            Log.i(LOG_TAG, "This is initLoader()");
+        } else {
+            ProgressBar prgBar = (ProgressBar) findViewById(R.id.loading_bar);
+            prgBar.setVisibility(View.GONE);
+            mEmptyStateTextView.setText("No Internet Connection...");
+            mEmptyStateTextView.setBackgroundResource(R.drawable.no_internet);
+        }
     }
 
     @NonNull
@@ -75,22 +93,22 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
     @SuppressLint("SetTextI18n")
     @Override
     public void onLoadFinished(@NonNull Loader<ArrayList<Earthquake>> loader, ArrayList<Earthquake> earthquakes) {
-        ProgressBar prgBar= (ProgressBar) findViewById(R.id.loading_bar);
-        prgBar.setVisibility(View.INVISIBLE);
+        ProgressBar prgBar = (ProgressBar) findViewById(R.id.loading_bar);
+        prgBar.setVisibility(View.GONE);
         Log.i(LOG_TAG, "This is onLoadFinished() callback");
+        mEmptyStateTextView.setText("No Data can be found...");
+        mEmptyStateTextView.setBackgroundResource(R.drawable.repeat_bg);
         mAdapter.clear();
         if (earthquakes != null && !earthquakes.isEmpty()) {
             mAdapter.addAll(earthquakes);
         }
-        mEmptyStateTextView.setText("No Data can be found...");
-        mEmptyStateTextView.setBackgroundResource(R.drawable.repeat_bg);
-
     }
 
     @Override
     public void onLoaderReset(@NonNull Loader<ArrayList<Earthquake>> loader) {
         Log.i(LOG_TAG, "This is onLoaderReset() callback");
-        mAdapter.addAll(new ArrayList<Earthquake>());
+        mAdapter.clear();
+        //mAdapter.addAll(new ArrayList<Earthquake>());
     }
 
 /**    private class EarthquakeAsyncTask extends AsyncTask<String, Void, ArrayList<Earthquake>> {
