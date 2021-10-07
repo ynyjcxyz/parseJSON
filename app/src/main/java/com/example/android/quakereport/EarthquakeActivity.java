@@ -39,7 +39,8 @@ import java.util.ArrayList;
 public class EarthquakeActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ArrayList<Earthquake>> {
     public static final String LOG_TAG = EarthquakeActivity.class.getSimpleName();
     private EarthquakeAdapter mAdapter;
-    private static final String USGS_REQUEST_URL = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=6&limit=10";
+    private static final String USGS_REQUEST_URL =
+            "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=6&limit=10";
     private static final int EARTHQUAKE_LOADER_ID = 1;
     private TextView mEmptyStateTextView;
 
@@ -96,11 +97,12 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
         ProgressBar prgBar = (ProgressBar) findViewById(R.id.loading_bar);
         prgBar.setVisibility(View.GONE);
         Log.i(LOG_TAG, "This is onLoadFinished() callback");
-        mEmptyStateTextView.setText("No Data can be found...");
-        mEmptyStateTextView.setBackgroundResource(R.drawable.repeat_bg);
         mAdapter.clear();
         if (earthquakes != null && !earthquakes.isEmpty()) {
             mAdapter.addAll(earthquakes);
+        }else {
+            mEmptyStateTextView.setText("No Data can be found...");
+            mEmptyStateTextView.setBackgroundResource(R.drawable.repeat_bg);
         }
     }
 
